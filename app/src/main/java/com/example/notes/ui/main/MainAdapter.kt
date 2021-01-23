@@ -7,11 +7,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notes.R
 import com.example.notes.data.model.Note
+import com.example.notes.databinding.ActivityMainBinding
+import com.example.notes.databinding.ItemNoteBinding
 
-class MainAdapter: RecyclerView.Adapter<NoteViewHolder>() {
+class MainAdapter : RecyclerView.Adapter<NoteViewHolder>() {
 
     var notes: List<Note> = listOf()
-        set(value){
+        set(value) {
             field = value
             notifyDataSetChanged()
         }
@@ -31,15 +33,12 @@ class MainAdapter: RecyclerView.Adapter<NoteViewHolder>() {
     }
 }
 
-class NoteViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-    private val title = itemView.findViewById<TextView>(R.id.title)
-    private val body = itemView.findViewById<TextView>(R.id.body)
+class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val ui: ItemNoteBinding = ItemNoteBinding.bind(itemView)
 
-    fun bind(note: Note){
-
-        title.text = note.title
-        body.text = note.note
-
+    fun bind(note: Note) {
+        ui.title.text = note.title
+        ui.body.text = note.note
     }
 }
 
