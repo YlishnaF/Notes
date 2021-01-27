@@ -1,26 +1,81 @@
 package com.example.notes.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.notes.data.model.Color
 import com.example.notes.data.model.Note
+import java.util.*
 
-object Repository{
-    val notes: List<Note> = listOf(
-        Note("Моя первая заметка",
-            "Kotlin очень краткий, но при этом выразительный язык"),
-        Note("Моя вторая заметка",
-            "Kotlin легко изучать"),
-        Note("Моя третья заметка",
-            "Выучить английский"),
-        Note("Моя четвертая заметка",
-            "Купить кукурузные палочки"),
-        Note("Моя пятая заметка",
-            "Покорми кота"),
-        Note("Моя шестая заметка",
-            "Ты молодец, съешь мороженое"),
-        Note("Моя седьмая заметка",
-            "В 23:00 пора спать")
+object Repository {
+
+    private val notesLiveData = MutableLiveData<List<Note>>()
+
+    val notes: MutableList<Note> = mutableListOf(
+        Note(
+            id = UUID.randomUUID().toString(),
+            title = "Моя первая заметка",
+            note = "Kotlin очень краткий, но при этом выразительный язык",
+            color = Color.WHITE
+        ),
+        Note(
+            id = UUID.randomUUID().toString(),
+            title = "Моя первая заметка",
+            note = "Kotlin очень краткий, но при этом выразительный язык",
+            color = Color.BLUE
+        ),
+        Note(
+            id = UUID.randomUUID().toString(),
+            title = "Моя первая заметка",
+            note = "Kotlin очень краткий, но при этом выразительный язык",
+            color = Color.GREEN
+        ),
+        Note(
+            id = UUID.randomUUID().toString(),
+            title = "Моя первая заметка",
+            note = "Kotlin очень краткий, но при этом выразительный язык",
+            color = Color.PINK
+        ),
+        Note(
+            id = UUID.randomUUID().toString(),
+            title = "Моя первая заметка",
+            note = "Kotlin очень краткий, но при этом выразительный язык",
+            color = Color.RED
+        ),
+        Note(
+            id = UUID.randomUUID().toString(),
+            title = "Моя первая заметка",
+            note = "Kotlin очень краткий, но при этом выразительный язык",
+            color = Color.YELLOW
+        ),
+        Note(
+            id = UUID.randomUUID().toString(),
+            title = "Моя первая заметка",
+            note = "Kotlin очень краткий, но при этом выразительный язык",
+            color = Color.VIOLET
+        )
     )
 
-//    fun getNotes() : List<Note>{
-//        return notes
-//    }
+    init {
+        notesLiveData.value = notes
+    }
+
+    fun getNotes(): LiveData<List<Note>> {
+        return notesLiveData
+    }
+
+    fun saveNotes(note: Note) {
+        addOrReplace(note)
+        notesLiveData.value = notes
+    }
+
+    private fun addOrReplace(note: Note) {
+
+        for (i in 0 until notes.size) {
+            if (notes[i] == note) {
+                notes.set(i, note)
+                return
+            }
+        }
+        notes.add(note)
+    }
 }
