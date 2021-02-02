@@ -3,79 +3,19 @@ package com.example.notes.data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.notes.data.model.Color
+import com.example.notes.data.model.FireStoreProvider
 import com.example.notes.data.model.Note
+import com.example.notes.data.model.RemoteDataProvider
 import java.util.*
 
 object Repository {
+    private val remoteDataProvider : RemoteDataProvider = FireStoreProvider()
 
-    private val notesLiveData = MutableLiveData<List<Note>>()
+    fun getNotes() = remoteDataProvider.subscribeToAllNotes()
 
-    val notes: MutableList<Note> = mutableListOf(
-        Note(
-            id = UUID.randomUUID().toString(),
-            title = "Моя первая заметка",
-            note = "Kotlin очень краткий, но при этом выразительный язык",
-            color = Color.WHITE
-        ),
-        Note(
-            id = UUID.randomUUID().toString(),
-            title = "Моя первая заметка",
-            note = "Kotlin очень краткий, но при этом выразительный язык",
-            color = Color.BLUE
-        ),
-        Note(
-            id = UUID.randomUUID().toString(),
-            title = "Моя первая заметка",
-            note = "Kotlin очень краткий, но при этом выразительный язык",
-            color = Color.GREEN
-        ),
-        Note(
-            id = UUID.randomUUID().toString(),
-            title = "Моя первая заметка",
-            note = "Kotlin очень краткий, но при этом выразительный язык",
-            color = Color.PINK
-        ),
-        Note(
-            id = UUID.randomUUID().toString(),
-            title = "Моя первая заметка",
-            note = "Kotlin очень краткий, но при этом выразительный язык",
-            color = Color.RED
-        ),
-        Note(
-            id = UUID.randomUUID().toString(),
-            title = "Моя первая заметка",
-            note = "Kotlin очень краткий, но при этом выразительный язык",
-            color = Color.YELLOW
-        ),
-        Note(
-            id = UUID.randomUUID().toString(),
-            title = "Моя первая заметка",
-            note = "Kotlin очень краткий, но при этом выразительный язык",
-            color = Color.VIOLET
-        )
-    )
+    fun saveNote(note: Note) = remoteDataProvider.saveNote(note)
 
-    init {
-        notesLiveData.value = notes
-    }
+    fun getNoteById(id:String) = remoteDataProvider.getNoteById(id)
 
-    fun getNotes(): LiveData<List<Note>> {
-        return notesLiveData
-    }
 
-    fun saveNotes(note: Note) {
-        addOrReplace(note)
-        notesLiveData.value = notes
-    }
-
-    private fun addOrReplace(note: Note) {
-
-        for (i in 0 until notes.size) {
-            if (notes[i] == note) {
-                notes.set(i, note)
-                return
-            }
-        }
-        notes.add(note)
-    }
 }
