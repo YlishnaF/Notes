@@ -3,10 +3,10 @@ package com.example.notes.data.model
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.notes.extensions.MyLog
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.*
-import java.lang.Exception
 
 private const val NOTES_COLLECTION = "notes"
 
@@ -20,15 +20,16 @@ class FireStoreProvider : RemoteDataProvider {
     private val notesReference = db.collection(NOTES_COLLECTION)
 
     override fun subscribeToAllNotes(): LiveData<NoteResult> {
+        Log.d(MyLog, "fun subscribeToAllNotes")
         val result = MutableLiveData<NoteResult>()
 
-        notesReference.addSnapshotListener { value, error ->
-            if (error != null) {
-                result.value = NoteResult.Error(error)
-            } else if (value != null) {
+        notesReference.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                result.value = NoteResult.Error(e)
+            } else if (snapshot != null) {
                 val notes = mutableListOf<Note>()
 
-                for (doc: QueryDocumentSnapshot in value) {
+                for (doc: QueryDocumentSnapshot in snapshot) {
                     notes.add(doc.toObject(Note::class.java))
                 }
                 result.value = NoteResult.Success(notes)
@@ -38,30 +39,28 @@ class FireStoreProvider : RemoteDataProvider {
     }
 
     override fun getNoteById(id: String): LiveData<NoteResult> {
+        Log.d(MyLog, "fun getNoteById")
         val result = MutableLiveData<NoteResult>()
-        notesReference.document(id)
-            .get()
+
+        notesReference.document(id).get()
             .addOnSuccessListener { snapshot ->
-                result.value = NoteResult.Success(snapshot.toObject(Note::class.java))
-            }
-            .addOnFailureListener { exception ->
-                result.value = NoteResult.Error(exception)
-            }
+                result.value =
+                    NoteResult.Success(snapshot.toObject(Note::class.java))
+            }.addOnFailureListener { result.value = NoteResult.Error(it) }
         return result
     }
 
     override fun saveNote(note: Note): LiveData<NoteResult> {
+        Log.d(MyLog, "fun save note")
         val result = MutableLiveData<NoteResult>()
-
         notesReference.document(note.id)
-            .set(note)
-            .addOnSuccessListener {
+            .set(note).addOnSuccessListener {
                 Log.d(TAG, "Note $note is saved")
                 result.value = NoteResult.Success(note)
             }.addOnFailureListener {
-                OnFailureListener { exeption ->
-                    Log.d(TAG, "Error saving note $note, massage: ${exeption.message}")
-                    result.value = NoteResult.Error(exeption)
+                OnFailureListener { p0 ->
+                    Log.d(TAG, "Error saving note $note, message: ${p0.message}")
+                    result.value = NoteResult.Error(p0)
                 }
             }
         return result

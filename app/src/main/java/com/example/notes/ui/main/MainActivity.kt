@@ -13,10 +13,10 @@ import com.example.notes.R
 import com.example.notes.data.model.Note
 import com.example.notes.databinding.ActivityMainBinding
 import com.example.notes.ui.common.BaseActivity
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity<List<Note>?, MainViewState>() {
-
     override val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(this).get(MainViewModel::class.java)
     }
@@ -26,7 +26,6 @@ class MainActivity : BaseActivity<List<Note>?, MainViewState>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(toolbar)
-
         adapter = MainAdapter(object : MainAdapter.OnItemClickListener {
             override fun onItemClick(note: Note) {
                 openNoteScreen(note)

@@ -1,16 +1,13 @@
 package com.example.notes.ui.common
 
 import android.os.Bundle
-import android.os.PersistableBundle
+import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.viewbinding.ViewBinding
-import com.example.notes.data.model.Note
-import com.example.notes.databinding.ActivityMainBinding
-import com.example.notes.ui.main.MainAdapter
-import com.example.notes.ui.main.MainViewModel
-import com.example.notes.ui.main.MainViewState
+import com.example.notes.R
+import com.example.notes.extensions.MyLog
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -21,7 +18,6 @@ abstract class BaseActivity<T, VS : BaseViewState<T>> : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutRes)
-
         viewModel.getViewSate().observe(this, object : Observer<VS> {
             override fun onChanged(t: VS?) {
                 if (t == null) return
@@ -38,7 +34,7 @@ abstract class BaseActivity<T, VS : BaseViewState<T>> : AppCompatActivity() {
     }
 
     protected fun showError(error: String) {
-        //TODO
+        Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show()
     }
-
 }
+

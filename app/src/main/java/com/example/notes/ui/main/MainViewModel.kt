@@ -1,11 +1,13 @@
 package com.example.notes.ui.main
 
+import android.util.Log
 import androidx.lifecycle.Observer
 
 import com.example.notes.data.Repository
 
 import com.example.notes.data.model.Note
 import com.example.notes.data.model.NoteResult
+import com.example.notes.extensions.MyLog
 import com.example.notes.ui.common.BaseViewModel
 
 class MainViewModel(val repository: Repository = Repository) :

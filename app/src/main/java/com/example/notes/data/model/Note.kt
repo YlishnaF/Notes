@@ -1,6 +1,5 @@
 package com.example.notes.data.model
 
-
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import java.util.*
@@ -23,6 +22,7 @@ data class Note(
 
         return true
     }
+
     override fun hashCode(): Int {
         return id.hashCode()
     }

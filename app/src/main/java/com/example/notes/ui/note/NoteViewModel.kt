@@ -1,10 +1,12 @@
 package com.example.notes.ui.note
 
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.example.notes.data.Repository
 import com.example.notes.data.model.Note
 import com.example.notes.data.model.NoteResult
+import com.example.notes.extensions.MyLog
 import com.example.notes.ui.common.BaseViewModel
 import java.util.*
 
@@ -38,6 +40,8 @@ class NoteViewModel(val repository: Repository = Repository) :
         })
     }
 
-    fun newId(): String =
-        UUID.randomUUID().toString()
+    fun newId(): String {
+        Log.d(MyLog, "newID created")
+        return UUID.randomUUID().toString()
+    }
 }
